@@ -7,6 +7,7 @@ class SmansaUser(AbstractUser):
     #additional fields
     address = models.CharField(max_length=300, null=True, help_text='Enter address')
     mobile_number = models.CharField(max_length=20, null=True, help_text='Enter mobile phone number')
+    bio = models.TextField(max_length=400, null=True, help_text="Enter your bio details here.")
 
     #this decorator make posible to call method w/o instantiate class
     @classmethod
