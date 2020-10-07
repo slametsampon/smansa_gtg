@@ -6,18 +6,14 @@ from django.views import generic
 from .models import Blog, BlogComment
 from accounts.models import SmansaUser
 
-def index(request):
-    """
-    View function for home page of site.
-    """
-    # Render the HTML template index.html
-    return render(
-        request,
-        'index.html',
-    )
+from django.views.generic import TemplateView
+
+# Create your views here.
+
+class BlogHomeView(TemplateView):
+    template_name = 'blog/index.html'
+
     
-
-
 class BlogListView(generic.ListView):
     """
     Generic class-based view for a list of all blogs.
