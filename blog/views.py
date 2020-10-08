@@ -9,9 +9,17 @@ from accounts.models import SmansaUser
 from django.views.generic import TemplateView
 
 # Create your views here.
-
+'''
 class BlogHomeView(TemplateView):
     template_name = 'blog/index.html'
+'''
+
+class BlogHomeView(generic.ListView):
+    """
+    Generic class-based view for a list of all blogs.
+    """
+    model = Blog
+    paginate_by = 5
 
     
 class BlogListView(generic.ListView):
@@ -50,8 +58,6 @@ class BlogListbyAuthorView(generic.ListView):
         context['blogger'] = get_object_or_404(SmansaUser, pk = self.kwargs['pk'])
         return context
     
-    
-
 class BlogDetailView(generic.DetailView):
     """
     Generic class-based detail view for a blog.
@@ -104,4 +110,4 @@ class BlogCommentCreate(LoginRequiredMixin, CreateView):
         """
         After posting comment return to associated blog.
         """
-        return reverse('blog-detail', kwargs={'pk': self.kwargs['pk'],})
+        return reverse('blog:blog-detail', kwargs={'pk': self.kwargs['pk'],})

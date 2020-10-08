@@ -23,7 +23,7 @@ class Blog(models.Model):
         """
         Returns the url to access a particular blog instance.
         """
-        return reverse('blog-detail', args=[str(self.id)])
+        return reverse('blog:blog-detail', args=[str(self.id)])
 
     def __str__(self):
         """

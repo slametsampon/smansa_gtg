@@ -18,7 +18,7 @@
     <ul>
         <li><a href="{% url 'home-smansa' %}">Home</a></li>
         {% if user.is_authenticated %}
-        <li><a href="{% url 'blog:index'%}">Blog</a></li>   
+        <li><a href="{% url 'blog:home'%}">Blog</a></li>   
         <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
         {% else %}
             <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
