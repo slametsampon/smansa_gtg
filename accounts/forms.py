@@ -1,51 +1,32 @@
 # accounts/forms.py
 from django import forms
+from django.forms import widgets
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import SmansaUser
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column
+from crispy_forms.layout import Layout, Submit, Fieldset, Field
 
 class SmansaUserCreationForm(UserCreationForm):
-    
+    password = forms.CharField(widget=forms.PasswordInput())
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Row(
-                Column('username', css_class='form-group col-md-6 mb-0'),
-                Column('mobile_number', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('address', css_class='form-group col-md-2 mb-0'),
-                css_class='form-row'
+            Fieldset('Entry Data User',
+            'username',
+            'mobile_number',
+            Field('address', css_class='form-group col-md-6 mb-0'),
+            'password',
             ),
             Submit('submit', 'Sign in')
         )
 
     class Meta:
         model = SmansaUser
-        fields = ('username', 'mobile_number', 'address')
+        fields = ('username', 'mobile_number', 'address', 'password')
 
 class SmansaUserChangeForm(UserChangeForm):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Fieldset('Main Data',
-                Row(
-                    Column('username', css_class='form-group col-md-6 mb-0'),
-                    Column('mobile_number', css_class='form-group col-md-6 mb-0'),
-                    css_class='form-row'
-                ),
-            ),
-            Fieldset('',
-            'address',
-            ),
-            Submit('submit', 'Sign in')
-        )
-
     class Meta:
         model = SmansaUser
         fields = ('username', 'mobile_number', 'address')

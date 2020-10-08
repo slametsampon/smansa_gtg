@@ -111,3 +111,31 @@ class BlogCommentCreate(LoginRequiredMixin, CreateView):
         After posting comment return to associated blog.
         """
         return reverse('blog:blog-detail', kwargs={'pk': self.kwargs['pk'],})
+
+class BlogCreate(LoginRequiredMixin, CreateView):
+    """
+    Form for adding a blog comment. Requires login. 
+    """
+    model = Blog
+    fields = ['name','description',]
+
+    def get_context_data(self, **kwargs):
+        """
+        Add associated blog to form template so can display its title in HTML.
+        """
+        # Call the base implementation first to get a context
+        context = super(BlogCreate, self).get_context_data(**kwargs)
+        # Get the blog from id and add it to the context
+        context['blog'] = get_object_or_404(Blog, pk = self.kwargs['pk'])
+        return context
+        
+    def form_valid(self, form):
+        """
+        Add author and associated blog to form data before setting it as valid (so it is saved to model)
+        """
+        #Add logged-in user as author of comment
+        form.instance.author = self.request.user
+
+        # Call super-class form validation behaviour
+        return super(BlogCreate, self).form_valid(form)
+
