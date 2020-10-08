@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from django.views import generic
 from .models import Blog, BlogComment
+from .forms import BlogCreate_form
 from accounts.models import SmansaUser
 
 from django.views.generic import TemplateView
@@ -112,21 +113,21 @@ class BlogCommentCreate(LoginRequiredMixin, CreateView):
         """
         return reverse('blog:blog-detail', kwargs={'pk': self.kwargs['pk'],})
 
-class BlogCreate(LoginRequiredMixin, CreateView):
+class BlogCreateView(LoginRequiredMixin, CreateView):
     """
     Form for adding a blog comment. Requires login. 
     """
     model = Blog
-    fields = ['name','description',]
+    form_class = BlogCreate_form
+    template_name = 'blog/blog_form.html'
 
     def get_context_data(self, **kwargs):
         """
         Add associated blog to form template so can display its title in HTML.
         """
         # Call the base implementation first to get a context
-        context = super(BlogCreate, self).get_context_data(**kwargs)
-        # Get the blog from id and add it to the context
-        context['blog'] = get_object_or_404(Blog, pk = self.kwargs['pk'])
+        context = super(BlogCreateView, self).get_context_data(**kwargs)
+
         return context
         
     def form_valid(self, form):
@@ -137,5 +138,5 @@ class BlogCreate(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
 
         # Call super-class form validation behaviour
-        return super(BlogCreate, self).form_valid(form)
+        return super(BlogCreateView, self).form_valid(form)
 

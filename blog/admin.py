@@ -25,5 +25,5 @@ class BlogAdmin(admin.ModelAdmin):
      - orders fields in detail view (fields), grouping the date fields horizontally
      - adds inline addition of blog comments in blog view (inlines)
     """
-    list_display = ('name', 'author', 'post_date')
+    list_display = ('title', 'author', 'post_date')
     inlines = [BlogCommentsInline]

@@ -10,7 +10,7 @@ class Blog(models.Model):
     """
     Model representing a blog post.
     """
-    name = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
     author = models.ForeignKey(SmansaUser, on_delete=models.SET_NULL, null=True)
       # Foreign Key used because Blog can only have one author/SmansaUser, but bloggsers can have multiple blog posts.
     description = models.TextField(max_length=2000, help_text="Enter you blog text here.")
@@ -29,7 +29,7 @@ class Blog(models.Model):
         """
         String for representing the Model object.
         """
-        return self.name
+        return self.title
         
         
 class BlogComment(models.Model):
