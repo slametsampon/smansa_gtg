@@ -27,6 +27,12 @@ class SmansaUser(AbstractUser):
             defaults=dtDict,
         )            
 
+    def get_absolute_url(self):
+        """
+        Returns the url to access a particular blog instance.
+        """
+        return reverse('accounts:blogger-detail', args=[str(self.id)])
+
     def __str__(self):
         return self.username
 
