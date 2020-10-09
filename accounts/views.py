@@ -6,10 +6,19 @@ from django.views.generic.edit import CreateView
 from .forms import SmansaUserCreate_form
 from .models import SmansaUser
 
-class SignUpView(CreateView):
+class SmansaUserCreateView(CreateView):
     form_class = SmansaUserCreate_form
-    #success_url = reverse_lazy('login')
+    model = SmansaUser
     template_name = 'registration/signup.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Add associated blog to form template so can display its title in HTML.
+        """
+        # Call the base implementation first to get a context
+        context = super(SmansaUserCreateView, self).get_context_data(**kwargs)
+
+        return context
 
     def form_valid(self, form,**kwargs):
         self.object = form.save(commit=False)
@@ -18,13 +27,7 @@ class SignUpView(CreateView):
 
         self.object.save()
 
-        return super(SignUpView,self).form_valid(form)    
-
-    def get_success_url(self): 
-        """
-        After posting comment return to associated blog.
-        """
-        return reverse('accounts:blogger-detail', kwargs={'pk': self.kwargs['pk'],})
+        return super(SmansaUserCreateView,self).form_valid(form)    
 
 class BloggerListView(generic.ListView):
     """

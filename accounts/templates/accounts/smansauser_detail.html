@@ -1,6 +1,11 @@
 {% extends "base_blog.html" %}
-{% load crispy_forms_tags %}
+
+{% block title %}User Detail{% endblock %}
 
 {% block content %}
-  {% crispy form %}
+  <h1>Smansa User Detial</h1>
+  <p><strong>Username : </strong> {{ smansauser.username }}</p>
+  <p><strong>Mobile phone : </strong> {{ smansauser.mobile_number }}</p>
+  <p><strong>Address : </strong> {{ smansauser.address }}</p>
+  <p><strong>Bio data : </strong> {{ smansauser.bio }}</p>
 {% endblock %}
