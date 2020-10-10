@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import SmansaUserCreate_form, SmansaUserVerifyForm
 from .models import SmansaUser
+from blog.models import Blog, BlogComment
 
 class SmansaUserCreateView(CreateView):
     form_class = SmansaUserCreate_form
@@ -37,11 +38,29 @@ class BloggerListView(generic.ListView):
     model = SmansaUser
     paginate_by = 5
 
+    def get_queryset(self):
+
+        if self.request.user.is_superuser:
+            return SmansaUser.objects.filter(verified_by=0)
+        else:
+            displayUser = list()
+            displayUser.append(self.request.user.id)
+
+            activeUser = SmansaUser.objects.filter(verified_by__gt=0)
+
+            for usr in activeUser:
+                displayUser.append(usr.id)
+
+            return SmansaUser.objects.filter(pk__in=displayUser)
+
 class BloggerDetailView(generic.DetailView):
     """
     Generic class-based detail view for a blog.
     """
     model = SmansaUser
+
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 class SmansaUserVerifyView(LoginRequiredMixin, UpdateView):
     form_class = SmansaUserVerifyForm
@@ -64,6 +83,18 @@ class SmansaUserVerifyView(LoginRequiredMixin, UpdateView):
             #Add logged-in user as author of comment
             self.object.verified_by = self.request.user.id
 
+            content_type = ContentType.objects.get_for_model(Blog)
+            permission = Permission.objects.get(
+                codename='add_blog',
+                content_type=content_type,
+            )
+            self.object.user_permissions.add(permission)
+            content_type = ContentType.objects.get_for_model(BlogComment)
+            permission = Permission.objects.get(
+                codename='add_blogcomment',
+                content_type=content_type,
+            )
+            self.object.user_permissions.add(permission)
         self.object.save()
 
         return super(SmansaUserVerifyView,self).form_valid(form)    

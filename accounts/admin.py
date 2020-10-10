@@ -13,12 +13,3 @@ class SmansaUserAdmin(UserAdmin):
     model = SmansaUser
     list_display = ('username','mobile_number')
     list_filter = ('username',)
-    fieldsets = (
-        (None, {
-            'fields': ('username',  'mobile_number')
-        }),
-        (None, {
-            'fields': ('address',)
-        }),
-    )
-    

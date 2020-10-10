@@ -10,7 +10,11 @@
         <li>
           <strong>{{author}}</strong> 
           {% if author.verified_by == 0 %}
-            <a href="{% url 'accounts:smnasa_user-verify' author.pk %}"> - Verify</a>
+            {% if user.is_superuser %}
+              <a href="{% url 'accounts:smnasa_user-verify' author.pk %}"> - Verify</a>
+            {% else %}
+              Need verification
+            {% endif %}
           {% else %}
             <a href="{% url 'blog:blogs-by-author' author.pk %}"> - Blog</a>
           {% endif %}
@@ -18,7 +22,6 @@
       {% endfor %}
 
     </ul>
-
     <!--For pagination includes, from blog app-->
     {% include 'includes/pagination.html' %}
 

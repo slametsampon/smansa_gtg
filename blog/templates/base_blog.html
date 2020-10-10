@@ -10,8 +10,10 @@
         {% block sidebar %}
         <ul class="sidebar-nav">
             <li><a href="{% url 'blog:blogs' %}">All blogs</a></li>
+            {% if perms.blog.add_blog %}       
+                <li><a href="{% url 'blog:blog-create' %}">Create blog</a></li>
+            {% endif %}
             <li><a href="{% url 'accounts:bloggers' %}">All bloggers</a></li>
-            <li><a href="{% url 'blog:blog-create' %}">Create blog</a></li>
         </ul>
         
         {% endblock %}
