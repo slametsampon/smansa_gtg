@@ -1,32 +1,12 @@
 {% extends "base_blog.html" %}
 
+{% block title %}User List{% endblock %}
+
 {% block content %}
-    <h1>All bloggers</h1>
+  <h1>All bloggers</h1>
 
-    {% if smansauser_list %}
-    <ul>
+  <!--For listing includes, from accounts app-->
+  {% include 'includes/smansaUserList.html' %}
 
-      {% for author in smansauser_list %}
-        <li>
-          <strong>{{author}}</strong> 
-          {% if author.verified_by == 0 %}
-            {% if user.is_superuser %}
-              <a href="{% url 'accounts:smnasa_user-verify' author.pk %}"> - Verify</a>
-            {% else %}
-              Need verification
-            {% endif %}
-          {% else %}
-            <a href="{% url 'blog:blogs-by-author' author.pk %}"> - Blog</a>
-          {% endif %}
-        </li>
-      {% endfor %}
-
-    </ul>
-    <!--For pagination includes, from blog app-->
-    {% include 'includes/pagination.html' %}
-
-    {% else %}
-      <p>There are no bloggers yet.</p>
-    {% endif %}       
 {% endblock %}
 

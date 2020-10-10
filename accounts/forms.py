@@ -28,6 +28,8 @@ class SmansaUserCreationForm(UserCreationForm):
 
 class SmansaUserCreate_form(ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
+    address = forms.CharField(widget=forms.Textarea(attrs={'rows':3}))
+    bio = forms.CharField(widget=forms.Textarea(attrs={'rows':5}))
 
     def clean_username(self):
         data = self.cleaned_data['username']
@@ -47,6 +49,12 @@ class SmansaUserCreate_form(ModelForm):
         # Remember to always return the cleaned data.
         return data
 
+    def clean_bio(self):
+        data = self.cleaned_data['bio']
+        
+        # Remember to always return the cleaned data.
+        return data
+
     def clean_password(self):
         data = self.cleaned_data['password']
         
@@ -61,6 +69,7 @@ class SmansaUserCreate_form(ModelForm):
             'username',
             'mobile_number',
             Field('address', css_class='form-group col-md-6 mb-0'),
+            Field('bio', css_class='form-group col-md-6 mb-0'),
             'password',
             ),
             Submit('submit', 'Sign in')
@@ -68,12 +77,12 @@ class SmansaUserCreate_form(ModelForm):
 
     class Meta:
         model = SmansaUser
-        fields = ('username', 'mobile_number', 'address', 'password')
+        fields = ('username', 'mobile_number', 'address', 'bio', 'password')
 
 class SmansaUserChangeForm(UserChangeForm):
     class Meta:
         model = SmansaUser
-        fields = ('username', 'mobile_number', 'address')
+        fields = ('username', 'mobile_number', 'address', 'bio')
 
 class SmansaUserVerifyForm(ModelForm):
     verify = forms.BooleanField(required=False)

@@ -99,3 +99,23 @@ class SmansaUserVerifyView(LoginRequiredMixin, UpdateView):
 
         return super(SmansaUserVerifyView,self).form_valid(form)    
 
+class AdminSmansaView(LoginRequiredMixin, generic.ListView):
+    model = SmansaUser
+    template_name = 'accounts/smansauser_admin.html'  # Specify your own template name/location
+
+    paginate_by = 5
+
+    def get_queryset(self):
+
+        if self.request.user.is_superuser:
+            return SmansaUser.objects.filter(verified_by=0)
+        else:
+            displayUser = list()
+            displayUser.append(self.request.user.id)
+
+            activeUser = SmansaUser.objects.filter(verified_by__gt=0)
+
+            for usr in activeUser:
+                displayUser.append(usr.id)
+
+            return SmansaUser.objects.filter(pk__in=displayUser)
