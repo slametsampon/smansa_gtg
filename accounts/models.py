@@ -37,3 +37,5 @@ class SmansaUser(AbstractUser):
     def __str__(self):
         return self.username
 
+    class Meta:
+        ordering = ['-verified_by', 'username']

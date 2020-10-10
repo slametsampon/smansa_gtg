@@ -1,8 +1,12 @@
 {% extends "base_blog.html" %}
+{% load crispy_forms_tags %}
 
-{% block title %}User Detail{% endblock %}
+{% block title %}User Verification{% endblock %}
 
 {% block content %}
     <!--For Smansa user detail form includes-->
     {% include 'includes/smansaUserDetail.html' %}
+
+    {% crispy form %}
+
 {% endblock %}

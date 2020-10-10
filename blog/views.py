@@ -69,7 +69,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.urls import reverse
 
-
+'''
 class BlogCommentCreate(LoginRequiredMixin, CreateView):
     """
     Form for adding a blog comment. Requires login. 
@@ -104,6 +104,7 @@ class BlogCommentCreate(LoginRequiredMixin, CreateView):
         """
         return reverse('blog:blog-detail', kwargs={'pk': self.kwargs['pk'],})
 
+'''
 class BlogCommentCreateView(LoginRequiredMixin, CreateView):
     """
     Form for adding a blog comment. Requires login. 
@@ -141,7 +142,7 @@ class BlogCommentCreateView(LoginRequiredMixin, CreateView):
 
 class BlogCreateView(LoginRequiredMixin, CreateView):
     """
-    Form for adding a blog comment. Requires login. 
+    Form for ceating a blog. Requires login. 
     """
     model = Blog
     form_class = BlogCreate_form

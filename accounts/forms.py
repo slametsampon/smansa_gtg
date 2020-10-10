@@ -74,3 +74,26 @@ class SmansaUserChangeForm(UserChangeForm):
     class Meta:
         model = SmansaUser
         fields = ('username', 'mobile_number', 'address')
+
+class SmansaUserVerifyForm(ModelForm):
+    verify = forms.BooleanField(required=False)
+
+    def clean_verify(self):
+        data = self.cleaned_data['verify']
+        
+        # Remember to always return the cleaned data.
+        return data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset('Verify as member',
+            'verify',
+            ),
+            Submit('submit', 'Verify')
+        )
+
+    class Meta:
+        model = SmansaUser
+        fields = ('verify',)
