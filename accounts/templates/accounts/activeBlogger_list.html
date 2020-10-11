@@ -1,6 +1,6 @@
 {% extends "base_blog.html" %}
 
-{% block title %}User Admin{% endblock %}
+{% block title %}Active Blogger List{% endblock %}
 
 {% block sidebar %}
     <ul class="sidebar-nav">
@@ -11,15 +11,10 @@
 {% endblock %}
 
 {% block content %}
-  <h3>{{caption}}</h3>
+  <h1>Active bloggers</h1>
 
-  <ul>
-    <li>Bloggers : {{bloggers}}</li>
-    <li>New Comers : {{newComers}}</li>
-    <li>Active Bloggers : {{activeBloggers}}</li>
-    <hr>
-    <li>Total Blogs : {{blogs}}</li>
-  </ul>
+  <!--For listing includes, from accounts app-->
+  {% include 'includes/smansaUserList.html' %}
 
 {% endblock %}
 

@@ -1,10 +1,10 @@
 # accounts/views.py
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import SmansaUserCreate_form, SmansaUserVerifyForm
+from .forms import SmansaUserCreate_form, SmansaUserVerifyForm, smansauser_admin_form
 from .models import SmansaUser
 from blog.models import Blog, BlogComment
 
@@ -53,6 +53,30 @@ class BloggerListView(generic.ListView):
 
             return SmansaUser.objects.filter(pk__in=displayUser)
 
+class BloggerNewListView(generic.ListView):
+    """
+    Generic class-based view for a list of bloggers.
+    """
+    template_name = 'accounts/newBlogger_list.html'  # Specify your own template name/location
+    model = SmansaUser
+    paginate_by = 5
+
+    def get_queryset(self):
+
+        return SmansaUser.objects.filter(verified_by=0)
+
+class BloggerActiveListView(generic.ListView):
+    """
+    Generic class-based view for a list of bloggers.
+    """
+    template_name = 'accounts/activeBlogger_list.html'  # Specify your own template name/location
+    model = SmansaUser
+    paginate_by = 5
+
+    def get_queryset(self):
+
+        return SmansaUser.objects.filter(verified_by__gt=0)
+
 class BloggerDetailView(generic.DetailView):
     """
     Generic class-based detail view for a blog.
@@ -99,23 +123,25 @@ class SmansaUserVerifyView(LoginRequiredMixin, UpdateView):
 
         return super(SmansaUserVerifyView,self).form_valid(form)    
 
-class AdminSmansaView(LoginRequiredMixin, generic.ListView):
-    model = SmansaUser
+class AdminSmansaView(LoginRequiredMixin, FormView):
     template_name = 'accounts/smansauser_admin.html'  # Specify your own template name/location
+    form_class = smansauser_admin_form
 
-    paginate_by = 5
+    def get_context_data(self, **kwargs):
 
-    def get_queryset(self):
+        # Call the base implementation first to get a context self.kwargs.get("pk")
+        context = super().get_context_data(**kwargs)
 
-        if self.request.user.is_superuser:
-            return SmansaUser.objects.filter(verified_by=0)
-        else:
-            displayUser = list()
-            displayUser.append(self.request.user.id)
+        context['caption'] = 'Blog Alumni SMANSA Genteng'
 
-            activeUser = SmansaUser.objects.filter(verified_by__gt=0)
+        bloggers = SmansaUser.objects.all()
+        newComers = bloggers.filter(verified_by=0).count()
+        activeBloggers = bloggers.filter(verified_by__gt=0).count()
+        context['bloggers'] = bloggers.count()
+        context['newComers'] = newComers
+        context['activeBloggers'] = activeBloggers
 
-            for usr in activeUser:
-                displayUser.append(usr.id)
+        blogs = Blog.objects.all().count()
+        context['blogs'] = blogs
 
-            return SmansaUser.objects.filter(pk__in=displayUser)
+        return context

@@ -1,5 +1,15 @@
 {% extends "base_blog.html" %}
 
+{% if user.is_superuser %}
+  {% block sidebar %}
+      <ul class="sidebar-nav">
+          <li><a href="{% url 'blog:blogs' %}">All blogs</a></li>
+          <li><a href="{% url 'accounts:bloggers-new' %}">New bloggers</a></li>
+          <li><a href="{% url 'accounts:bloggers-active' %}">Active bloggers</a></li>
+      </ul>        
+  {% endblock %}
+{% endif %}
+
 {% block content %}
     <h1>All blogs</h1>
 

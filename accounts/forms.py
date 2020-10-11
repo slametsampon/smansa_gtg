@@ -106,3 +106,6 @@ class SmansaUserVerifyForm(ModelForm):
     class Meta:
         model = SmansaUser
         fields = ('verify',)
+
+class smansauser_admin_form(forms.Form):
+    pass

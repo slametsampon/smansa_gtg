@@ -20,8 +20,8 @@
     <div class="topnav">
       <ul>
           <li><a href="{% url 'home-smansa' %}">Home</a></li>
+          <li><a href="{% url 'blog:home'%}">Blog</a></li>   
           {% if user.is_authenticated %}
-            <li><a href="{% url 'blog:home'%}">Blog</a></li>   
             <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
             <li style="float: right;">User : {{ user.get_username }}</li>
           {% else %}
