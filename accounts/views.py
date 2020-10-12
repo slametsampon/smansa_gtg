@@ -3,6 +3,8 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 from .forms import SmansaUserCreate_form, SmansaUserVerifyForm, smansauser_admin_form
 from .models import SmansaUser
@@ -82,9 +84,6 @@ class BloggerDetailView(generic.DetailView):
     Generic class-based detail view for a blog.
     """
     model = SmansaUser
-
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
 
 class SmansaUserVerifyView(LoginRequiredMixin, UpdateView):
     form_class = SmansaUserVerifyForm

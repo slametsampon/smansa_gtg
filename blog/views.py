@@ -1,19 +1,12 @@
 from django.shortcuts import render
-
-# Create your views here.
-
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
+
 from .models import Blog, BlogComment
 from .forms import BlogCreate_form, BlogCommentCreate_form
 from accounts.models import SmansaUser
 
-from django.views.generic import TemplateView
-
-# Create your views here.
-'''
-class BlogHomeView(TemplateView):
-    template_name = 'blog/index.html'
-'''
 
 class BlogHomeView(generic.ListView):
     """
@@ -21,7 +14,6 @@ class BlogHomeView(generic.ListView):
     """
     model = Blog
     paginate_by = 5
-
     
 class BlogListView(generic.ListView):
     """
@@ -65,11 +57,7 @@ class BlogDetailView(generic.DetailView):
     """
     model = Blog
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView
-from django.urls import reverse
-
-class BlogCommentCreateView(LoginRequiredMixin, CreateView):
+class BlogCommentCreateView(LoginRequiredMixin, generic.CreateView):
     """
     Form for adding a blog comment. Requires login. 
     """
@@ -104,7 +92,7 @@ class BlogCommentCreateView(LoginRequiredMixin, CreateView):
         """
         return reverse('blog:blog-detail', kwargs={'pk': self.kwargs['pk'],})
 
-class BlogCreateView(LoginRequiredMixin, CreateView):
+class BlogCreateView(LoginRequiredMixin, generic.CreateView):
     """
     Form for ceating a blog. Requires login. 
     """

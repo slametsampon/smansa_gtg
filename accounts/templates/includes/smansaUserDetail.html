@@ -8,3 +8,8 @@
 <p>{{ smansauser.address }}</p>
 <p><strong>Bio data</strong></p>
 <p>{{ smansauser.bio }}</p>
+{% if user.is_superuser %}
+    <a href="{% url 'accounts:blogger-delete' smansauser.pk %}"> Delete — Blogger</a>
+{% else %}
+  — Need verification 
+{% endif %}
