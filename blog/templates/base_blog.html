@@ -13,9 +13,10 @@
                         {% if perms.blog.add_blog %}       
                             <li><a href="{% url 'blog:blog-create' %}">Create blog</a></li>
                         {% endif %}
-                        <li><a href="{% url 'accounts:bloggers' %}">All bloggers</a></li>
                         {% if user.is_superuser %}
                             <li><a href="{% url 'accounts:admin' %}">Admin</a></li>
+                        {% else %}
+                            <li><a href="{% url 'accounts:bloggers' %}">All bloggers</a></li>
                         {% endif %}
                     </ul>        
                 {% endblock %}

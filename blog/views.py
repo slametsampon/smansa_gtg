@@ -131,3 +131,39 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
         # Call super-class form validation behaviour
         return super(BlogCreateView, self).form_valid(form)
 
+# import generic UpdateView 
+from django.views.generic.edit import DeleteView 
+  
+class BlogDeleteView(DeleteView): 
+    # specify the model you want to use 
+    model = Blog 
+      
+    # can specify success url 
+    # url to redirect after sucessfully 
+    # deleting object 
+    success_url = '/blog/blogs/'
+
+class BlogCommentDeleteView(DeleteView): 
+    # specify the model you want to use 
+    model = BlogComment 
+    
+    #buffer context
+    plus_context = {}
+      
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        blog = BlogComment.objects.get(pk = self.kwargs['pk']).blog
+
+        self.plus_context['blog'] = blog
+
+        return context
+    # can specify success url 
+    # url to redirect after sucessfully 
+    # deleting object 
+    def get_success_url(self): 
+        """
+        After deleting comment return to associated blog.
+        """
+        blog = self.plus_context.get('blog', None)
+        return reverse('blog:blog-detail', kwargs={'pk': blog.pk,})

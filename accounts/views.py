@@ -145,3 +145,13 @@ class AdminSmansaView(LoginRequiredMixin, FormView):
         context['blogs'] = blogs
 
         return context
+
+class SmansaUserDeleteView(generic.DeleteView): 
+    # specify the model you want to use 
+    model = SmansaUser 
+      
+    # can specify success url 
+    # url to redirect after sucessfully 
+    # deleting object 
+    success_url = '/accounts/bloggers/'
+

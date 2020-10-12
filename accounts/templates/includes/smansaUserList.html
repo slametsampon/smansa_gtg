@@ -7,12 +7,13 @@
       <strong>{{author}}</strong> 
       {% if author.verified_by == 0 %}
         {% if user.is_superuser %}
-          <a href="{% url 'accounts:smnasa_user-verify' author.pk %}"> - Verify</a>
+        —<a href="{% url 'accounts:blogger-delete' author.pk %}"> Delete </a>
+        —<a href="{% url 'accounts:blogger-verify' author.pk %}"> Verify </a>
         {% else %}
-          Need verification
+          — Need verification 
         {% endif %}
       {% else %}
-        <a href="{% url 'blog:blogs-by-author' author.pk %}"> - Blog</a>
+        <a href="{% url 'blog:blogs-by-author' author.pk %}">Blog </a>
       {% endif %}
     </li>
   {% endfor %}

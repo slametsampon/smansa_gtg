@@ -11,3 +11,10 @@ urlpatterns = [
     path('blogger/<int:pk>', views.BlogListbyAuthorView.as_view(), name='blogs-by-author'),
     path('blog/<int:pk>/comment/', views.BlogCommentCreateView.as_view(), name='blog-comment'),
 ]
+
+urlpatterns += [ 
+    # <pk> is identification for id field, 
+    # slug can also be used 
+    path('delete/<int:pk>', views.BlogDeleteView.as_view(), name='blog-delete'), 
+    path('comment/<int:pk>/delete/', views.BlogCommentDeleteView.as_view(), name='blog-comment-delete'), 
+]
