@@ -8,8 +8,21 @@
 <p>{{ smansauser.address }}</p>
 <p><strong>Bio data</strong></p>
 <p>{{ smansauser.bio }}</p>
+<hr>
+
+<!--Logic for User-->
+<a href="{% url 'accounts:blogger-update' smansauser.pk %}"> Update </a>
 {% if user.is_superuser %}
-    <a href="{% url 'accounts:blogger-delete' smansauser.pk %}"> Delete — Blogger</a>
+  —<a href="{% url 'accounts:blogger-delete' smansauser.pk %}"> Delete </a>
+  {% if smansauser.verified_by == 0 %}
+    —<a href="{% url 'accounts:blogger-verify' smansauser.pk %}"> Verify </a>
+  {% else %}
+    —<a href="{% url 'blog:blogs-by-author' smansauser.pk %}">Blog list</a>
+  {% endif %}
 {% else %}
-  — Need verification 
+  {% if smansauser.verified_by == 0 %}
+    — Need verification 
+  {% else %}
+    <a href="{% url 'blog:blogs-by-author' smansauser.pk %}">Blog list</a>
+  {% endif %}
 {% endif %}

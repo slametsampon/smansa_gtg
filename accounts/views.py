@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
-from .forms import SmansaUserCreate_form, SmansaUserVerifyForm, smansauser_admin_form
+from .forms import SmansaUserCreate_form, SmansaUserVerifyForm, smansauser_admin_form, SmansaUserUpdateForm
 from .models import SmansaUser
 from blog.models import Blog, BlogComment
 
@@ -102,7 +102,7 @@ class SmansaUserVerifyView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form,**kwargs):
         self.object = form.save(commit=False)
 
-        if form.cleaned_data.get('verify', None):
+        if form.cleaned_data.get('user_mode', None) == '1':#general user
             #Add logged-in user as author of comment
             self.object.verified_by = self.request.user.id
 
@@ -118,6 +118,10 @@ class SmansaUserVerifyView(LoginRequiredMixin, UpdateView):
                 content_type=content_type,
             )
             self.object.user_permissions.add(permission)
+        elif form.cleaned_data.get('user_mode', None) == '2':#Admin user
+            self.object.is_staff = True
+            self.object.is_admin = True
+            self.object.is_superuser = True
         self.object.save()
 
         return super(SmansaUserVerifyView,self).form_valid(form)    
@@ -154,3 +158,46 @@ class SmansaUserDeleteView(generic.DeleteView):
     # deleting object 
     success_url = '/accounts/bloggers/'
 
+class SmansaUserUpdateView(LoginRequiredMixin, UpdateView):
+    form_class = SmansaUserUpdateForm
+    model = SmansaUser
+    template_name = 'accounts/smansauser_update.html'  # Specify your own template name/location
+
+    # Sending user object to the form, to verify which fields to display/remove (depending on group)
+    def get_form_kwargs(self):
+        kwargs = super(SmansaUserUpdateView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(SmansaUserUpdateView, self).get_context_data(**kwargs)
+
+        return context
+
+    def form_valid(self, form,**kwargs):
+        self.object = form.save(commit=False)
+
+        if form.cleaned_data.get('user_mode', None) == '1':#general user
+            #Add logged-in user as author of comment
+            self.object.verified_by = self.request.user.id
+
+            content_type = ContentType.objects.get_for_model(Blog)
+            permission = Permission.objects.get(
+                codename='add_blog',
+                content_type=content_type,
+            )
+            self.object.user_permissions.add(permission)
+            content_type = ContentType.objects.get_for_model(BlogComment)
+            permission = Permission.objects.get(
+                codename='add_blogcomment',
+                content_type=content_type,
+            )
+            self.object.user_permissions.add(permission)
+        elif form.cleaned_data.get('user_mode', None) == '2':#Admin user
+            self.object.is_staff = True
+            self.object.is_admin = True
+            self.object.is_superuser = True
+        self.object.save()
+
+        return super(SmansaUserUpdateView,self).form_valid(form)    

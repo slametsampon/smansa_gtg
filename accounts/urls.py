@@ -18,4 +18,5 @@ urlpatterns += [
     # <pk> is identification for id field, 
     # slug can also be used 
     path('blogger/<int:pk>/delete/', views.SmansaUserDeleteView.as_view(), name='blogger-delete'), 
+    path('blogger/<int:pk>/update/', views.SmansaUserUpdateView.as_view(), name='blogger-update'), 
 ]

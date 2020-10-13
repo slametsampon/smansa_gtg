@@ -85,10 +85,11 @@ class SmansaUserChangeForm(UserChangeForm):
         fields = ('username', 'mobile_number', 'address', 'bio')
 
 class SmansaUserVerifyForm(ModelForm):
-    verify = forms.BooleanField(required=False)
+    CHOICES = [('1', 'Blogger'), ('2', 'Admin')]
+    user_mode = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, initial = '1')
 
-    def clean_verify(self):
-        data = self.cleaned_data['verify']
+    def clean_user_mode(self):
+        data = self.cleaned_data['user_mode']
         
         # Remember to always return the cleaned data.
         return data
@@ -98,14 +99,73 @@ class SmansaUserVerifyForm(ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset('Verify as member',
-            'verify',
+            'user_mode',
             ),
             Submit('submit', 'Verify')
         )
 
     class Meta:
         model = SmansaUser
-        fields = ('verify',)
+        fields = ('user_mode',)
 
 class smansauser_admin_form(forms.Form):
     pass
+
+class SmansaUserUpdateForm(ModelForm):
+    CHOICES = [('1', 'Blogger'), ('2', 'Admin')]
+    address = forms.CharField(widget=forms.Textarea(attrs={'rows':3}))
+    bio = forms.CharField(widget=forms.Textarea(attrs={'rows':5}))
+    user_mode = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, initial = '1')
+
+    def clean_mobile_number(self):
+        data = self.cleaned_data['mobile_number']
+        
+        # Remember to always return the cleaned data.
+        return data
+
+    def clean_address(self):
+        data = self.cleaned_data['address']
+        
+        # Remember to always return the cleaned data.
+        return data
+
+    def clean_bio(self):
+        data = self.cleaned_data['bio']
+        
+        # Remember to always return the cleaned data.
+        return data
+
+    def clean_user_mode(self):
+        data = self.cleaned_data['user_mode']
+        
+        # Remember to always return the cleaned data.
+        return data
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        if self.user.is_superuser:
+            self.helper.layout = Layout(
+                Fieldset('Update as member',
+                'mobile_number',
+                Field('address', css_class='form-group col-md-6 mb-0'),
+                Field('bio', css_class='form-group col-md-6 mb-0'),
+                'user_mode',
+                ),
+                Submit('submit', 'Update')
+            )
+        else:
+            self.helper.layout = Layout(
+                Fieldset('Update as member',
+                'mobile_number',
+                Field('address', css_class='form-group col-md-6 mb-0'),
+                Field('bio', css_class='form-group col-md-6 mb-0'),
+                ),
+                Submit('submit', 'Update')
+            )
+
+    class Meta:
+        model = SmansaUser
+        fields = ('mobile_number', 'address', 'bio', 'user_mode')
