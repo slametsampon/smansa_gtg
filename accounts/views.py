@@ -178,6 +178,10 @@ class SmansaUserUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form,**kwargs):
         self.object = form.save(commit=False)
 
+        #update password if non blank
+        if len(form.cleaned_data['password']):
+            self.object.set_password(form.cleaned_data['password'])
+
         if form.cleaned_data.get('user_mode', None) == '1':#general user
             #Add logged-in user as author of comment
             self.object.verified_by = self.request.user.id

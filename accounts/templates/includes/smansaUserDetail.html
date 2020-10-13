@@ -11,9 +11,13 @@
 <hr>
 
 <!--Logic for User-->
-<a href="{% url 'accounts:blogger-update' smansauser.pk %}"> Update </a>
+{% if user.pk == smansauser.pk %}
+  <a href="{% url 'accounts:blogger-update' smansauser.pk %}"> Update </a>—
+{% endif %}
+
 {% if user.is_superuser %}
-  —<a href="{% url 'accounts:blogger-delete' smansauser.pk %}"> Delete </a>
+  <a href="{% url 'accounts:blogger-delete' smansauser.pk %}"> Delete </a>
+  —<a href="{% url 'accounts:blogger-verify' smansauser.pk %}"> Update to Admin </a>
   {% if smansauser.verified_by == 0 %}
     —<a href="{% url 'accounts:blogger-verify' smansauser.pk %}"> Verify </a>
   {% else %}
@@ -21,7 +25,7 @@
   {% endif %}
 {% else %}
   {% if smansauser.verified_by == 0 %}
-    — Need verification 
+    Need verification 
   {% else %}
     <a href="{% url 'blog:blogs-by-author' smansauser.pk %}">Blog list</a>
   {% endif %}

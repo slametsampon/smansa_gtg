@@ -113,6 +113,7 @@ class smansauser_admin_form(forms.Form):
 
 class SmansaUserUpdateForm(ModelForm):
     CHOICES = [('1', 'Blogger'), ('2', 'Admin')]
+    password = forms.CharField(widget=forms.PasswordInput())
     address = forms.CharField(widget=forms.Textarea(attrs={'rows':3}))
     bio = forms.CharField(widget=forms.Textarea(attrs={'rows':5}))
     user_mode = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, initial = '1')
@@ -135,6 +136,12 @@ class SmansaUserUpdateForm(ModelForm):
         # Remember to always return the cleaned data.
         return data
 
+    def password_number(self):
+        data = self.cleaned_data['password']
+        
+        # Remember to always return the cleaned data.
+        return data
+
     def clean_user_mode(self):
         data = self.cleaned_data['user_mode']
         
@@ -152,6 +159,7 @@ class SmansaUserUpdateForm(ModelForm):
                 'mobile_number',
                 Field('address', css_class='form-group col-md-6 mb-0'),
                 Field('bio', css_class='form-group col-md-6 mb-0'),
+                'password',
                 'user_mode',
                 ),
                 Submit('submit', 'Update')
@@ -162,10 +170,11 @@ class SmansaUserUpdateForm(ModelForm):
                 'mobile_number',
                 Field('address', css_class='form-group col-md-6 mb-0'),
                 Field('bio', css_class='form-group col-md-6 mb-0'),
+                'password',
                 ),
                 Submit('submit', 'Update')
             )
 
     class Meta:
         model = SmansaUser
-        fields = ('mobile_number', 'address', 'bio', 'user_mode')
+        fields = ('mobile_number', 'address', 'bio', 'user_mode', 'password')
