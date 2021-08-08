@@ -166,7 +166,7 @@ class SmansaUserUpdateView(LoginRequiredMixin, UpdateView):
     # Sending user object to the form, to verify which fields to display/remove (depending on group)
     def get_form_kwargs(self):
         kwargs = super(SmansaUserUpdateView, self).get_form_kwargs()
-        kwargs.update({'user': self.request.user})
+        kwargs.update({'userUpdate': self.request.user})
         return kwargs
 
     def get_context_data(self, **kwargs):

@@ -149,7 +149,7 @@ class SmansaUserUpdateForm(ModelForm):
         return data
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
+        self.user = kwargs.pop('userUpdate')
 
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
